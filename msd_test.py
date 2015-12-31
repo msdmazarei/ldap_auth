@@ -9,6 +9,8 @@ context = thas_auth_context(ldap_uri,
                             users_base_dn=config.ldap_base_dn,
                             user_creator_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
                             user_creator_password=config.ldap_bind_user_creator_pass,
+                            user_editor_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
+                            user_editor_password=config.ldap_bind_user_creator_pass,
                             user_search_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
                             user_search_bind_dn_pass=config.ldap_bind_user_creator_pass)
 
@@ -25,7 +27,14 @@ def adduser():
 
 def getuser():
     u=user(context)
-    m=u.get_user_by_user_id('m.mazarei')
+    m=u.get_user('m.mazarei')
+
+def edit_user():
+    u=user(context)
+    m=u.get_user('m.mazarei')
+    m.surname='JAFAR GHOLI'
+    m.save()
+
 
 if __name__=='__main__':
-    getuser()
+    edit_user()
