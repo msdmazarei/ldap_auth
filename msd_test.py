@@ -2,6 +2,7 @@ __author__ = 'msd'
 import config
 from THAS_AUTH import thas_auth_context
 from user import  user
+from group import group
 
 ldap_uri='ldap://{basedn}:{port}'.format(basedn=config.ldap_server_host,port=config.ldap_server_port)
 context = thas_auth_context(ldap_uri,
@@ -12,7 +13,15 @@ context = thas_auth_context(ldap_uri,
                             user_editor_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
                             user_editor_password=config.ldap_bind_user_creator_pass,
                             user_search_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
-                            user_search_bind_dn_pass=config.ldap_bind_user_creator_pass)
+                            user_search_bind_dn_pass=config.ldap_bind_user_creator_pass,
+
+                            groups_base_dn=config.ldap_base_dn,
+                            group_creator_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
+                            group_creator_password=config.ldap_bind_user_creator_pass,
+                            group_editor_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
+                            group_editor_password=config.ldap_bind_user_creator_pass,
+                            group_search_bind_dn='cn=admin,{basedn}'.format(basedn=config.ldap_base_dn),
+                            group_search_bind_dn_pass=config.ldap_bind_user_creator_pass)
 
 def test1():
     auth_context = thas_auth_context(ldap_uri,0,config.ldap_base_dn)
@@ -35,6 +44,13 @@ def edit_user():
     m.surname='JAFAR GHOLI'
     m.save()
 
+def add_group():
+    g=group(context)
+    g.group_name='test_group'
+    g.members=['uid=m.mazarei,dc=ldap,dc=lxc,dc=msd,dc=local']
+    g.save()
+
+
 
 if __name__=='__main__':
-    edit_user()
+    add_group()
